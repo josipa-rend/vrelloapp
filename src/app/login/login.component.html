@@ -1,0 +1,25 @@
+<div>
+  <div class="row align-items-center" style="height: 100vh;">
+    <div class="mx-auto col-10 col-md-8 col-lg-6">
+  <form class="form-login" [formGroup]="loginForm" (ngSubmit)="loginUser()">
+      <h3 class="h3 mb-3 font-weight-normal text-center">Login to Vrello</h3>
+      <br>
+
+      <div class="form-group">
+          <div><label>Username</label></div>
+          <input type="username" class="form-control " formControlName="username" placeholder="Enter username" required>
+      </div>
+      <br>
+      <div class="form-group">
+          <div><label>Password</label></div>
+          <input type="password" class="form-control" formControlName="password" placeholder="Password">
+      </div>
+      <br>
+      <div justify-content-center >
+        <button type="submit" class="btn btn-block btn-primary">Login</button>
+      </div>
+
+  </form>
+</div>
+</div>
+</div>

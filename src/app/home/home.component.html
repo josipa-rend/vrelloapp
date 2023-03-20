@@ -1,0 +1,146 @@
+
+<div class="container" id="main-container">
+
+    <div class="row">
+      <br>
+    </div>
+
+    <div class="row">
+        <div class="col-3">
+          <button type="button" class="btn btn-secondary" (click)="onOpenModal('add')">+ Add Board</button>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-3">
+          <h4>Active projects:</h4>
+        </div>
+    </div>
+
+    <div class="row">
+        <div *ngFor="let board of boards;let indexOfelement=index;" class="col-md-6 col-xl-3 ">
+
+          <br>
+          <div class="card m-b-3" style="background-color:rgb(210, 209, 209);">
+                <div class="card-body row">
+                    <div class="col-3">
+                        <a href=""><img src="{{'https://picsum.photos/200/300?random=' + indexOfelement}}" alt="" class="img-fluid rounded-circle w-60 h-60"></a>
+                    </div>
+                    <div class="col-9 card-title align-self-center mb-0">
+                        <!-- <h5>{{'Board ' + indexOfelement}}</h5> -->
+                        <h5>{{board.name}}</h5>
+                        <button type="button" class="btn btn-primary btn-success" (click)="onManage(board)">Manage</button>
+                        <br>
+                        <br>
+                        <p class="m-0">Board members: </p>
+                        <div *ngFor="let user of board.members">
+                          <small class="m-1">{{user.name}}</small>
+                        </div>
+
+                        <!-- Notification for no members -->
+                        <div *ngIf="board.members?.length == 0" class="col">
+                          <div class="alert alert-info" role="alert">
+                            <small>No members</small>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="bg-danger border-2 border-top ">
+                <div class="card-body">
+                    <div class="d-grid gap-2 d-md-block">
+                      <!-- <button type="button" class="btn btn-secondary btn-sm" (click)="onOpenModal('edit', board)">Edit</button> -->
+                      &nbsp;<button type="button" class="btn btn-secondary btn-sm" (click)="onOpenModal('delete', board)">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Board Modal -->
+<div class="modal fade" id="addBoardModal" tabindex="-1" role="dialog" aria-labelledby="addBoardModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+       <div class="modal-header">
+          <h5 class="modal-title" id="addBoardModalLabel">Add Board</h5>
+          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+       </div>
+       <div class="modal-body">
+          <form #addForm="ngForm" (ngSubmit)="onAddBoard(addForm)">
+          <div class="form-group">
+             <label for="name">Name</label>
+             <input type="text" ngModel name="name" class="form-control" id="name" placeholder="Name" required>
+          </div>
+          <br>
+          <div class="modal-footer">
+             <button type="button" id="add-board-form" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+             <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+          </form>
+       </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- Edit Modal -->
+<div class="modal fade" id="updateBoardModal" tabindex="-1" role="dialog" aria-labelledby="boardEditModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+     <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title" id="updateBoardModalLabel">Edit Board {{editBoard?.name}}</h5>
+           <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+           </button>
+        </div>
+        <div class="modal-body">
+           <form #editForm="ngForm" (ngSubmit)="onUpdateBoard(editForm.value)">
+              <input type="hidden" ngModel="{{editBoard?.id}}" name="id" class="form-control" id="id" placeholder="Id">
+              <input type="hidden" ngModel="{{editBoard?.members}}" name="members" class="form-control" id="members" placeholder="Members">
+              <input type="hidden" ngModel="{{editBoard?.lines}}" name="lines" class="form-control" id="lines" placeholder="Lines">
+              <div class="form-group">
+                 <label for="name">Name</label>
+                 <input type="text" ngModel="{{editBoard?.name}}" name="name" class="form-control" id="name" placeholder="Name">
+              </div>
+              <div class="modal-footer">
+                 <button type="button" id="" data-bs-dismiss="modal" class="btn btn-secondary">Close</button>
+                 <button type="submit" data-bs-dismiss="modal" class="btn btn-primary">Save changes</button>
+              </div>
+           </form>
+        </div>
+     </div>
+  </div>
+</div>
+
+  <!-- Delete Modal -->
+<div class="modal fade" id="deleteBoardModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+     <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title" id="deleteModelLabel">Delete Board</h5>
+           <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+           </button>
+        </div>
+        <div class="modal-body">
+           <p>Are you sure you want to delete board {{deleteBoard?.name}}?</p>
+           <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+              <p>{{deleteBoard?.name}} {{deleteBoard?.id}}</p>
+              <button (click)="onDeleteBoard(deleteBoard?.id!)" class="btn btn-danger" data-dismiss="modal">Yes</button>
+           </div>
+        </div>
+     </div>
+  </div>
+</div>
+<!-- </div> -->
+
+<!-- Notification for no boards -->
+<div *ngIf="boards?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+  <div class="alert alert-info" role="alert">
+    <h4 class="alert-heading">NO BOARDS!</h4>
+    <p>No Boards were found.</p>
+  </div>
+</div>
